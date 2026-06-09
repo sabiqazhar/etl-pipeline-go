@@ -15,4 +15,5 @@ We use RFCs to provide a living history of the "why" behind our architecture. Th
 
 | Number | Title | Status | Date | TL;DR |
 | :--- | :--- | :--- | :--- | :--- |
+| 0001 | [Pipeline Core Architecture](./0001-pipeline-core-architecture.md) | Draft | 2026-06-09 | Go interfaces, lifecycle contracts, in-process transport, and autonomous supervision for multi-pipeline/multi-sink ETL with at-least-once delivery |
 | 0000 | [Template](./0000-template.md) | - | - | Base template for new RFCs |
