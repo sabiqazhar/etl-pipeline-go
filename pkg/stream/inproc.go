@@ -10,14 +10,14 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/aula-id/etl-pipeline-go/pkg/pipeline"
+	"github.com/aula-id/etl-pipeline-go/pkg/model"
 )
 
 // InProcStream implements Stream using a bounded channel and a spillover file.
 type InProcStream struct {
 	mu         sync.RWMutex
-	ch         chan pipeline.RecordBatch
-	readers    []chan pipeline.RecordBatch
+	ch         chan model.RecordBatch
+	readers    []chan model.RecordBatch
 	file       *os.File
 	offsetFile *os.File
 	dir        string
@@ -41,7 +41,7 @@ func NewInProcStream(dir string, capacity int) (*InProcStream, error) {
 
 func (s *InProcStream) Init(ctx context.Context) error {
 	s.ctx, s.cancel = context.WithCancel(ctx)
-	s.ch = make(chan pipeline.RecordBatch, s.capacity)
+	s.ch = make(chan model.RecordBatch, s.capacity)
 
 	// Open spillover file (append-only)
 	var err error
@@ -102,7 +102,7 @@ func (s *InProcStream) Reader() StreamReader {
 	defer s.mu.Unlock()
 
 	// Pub/Sub: Each reader gets its own buffered channel
-	rCh := make(chan pipeline.RecordBatch, s.capacity)
+	rCh := make(chan model.RecordBatch, s.capacity)
 	s.readers = append(s.readers, rCh)
 
 	return &inProcReader{stream: s, ch: rCh}
@@ -114,7 +114,7 @@ type inProcWriter struct {
 	stream *InProcStream
 }
 
-func (w *inProcWriter) Publish(ctx context.Context, batch pipeline.RecordBatch) error {
+func (w *inProcWriter) Publish(ctx context.Context, batch model.RecordBatch) error {
 	data, err := json.Marshal(batch)
 	if err != nil {
 		return err
@@ -164,25 +164,25 @@ func (w *inProcWriter) Flush(ctx context.Context) error {
 
 type inProcReader struct {
 	stream     *InProcStream
-	ch         chan pipeline.RecordBatch
+	ch         chan model.RecordBatch
 	lastOffset int64 // FIX: Tracks the offset of the last read batch
 }
 
-func (r *inProcReader) Read(ctx context.Context) (pipeline.RecordBatch, error) {
+func (r *inProcReader) Read(ctx context.Context) (model.RecordBatch, error) {
 	select {
 	case batch, ok := <-r.ch:
 		if !ok {
-			return pipeline.RecordBatch{}, io.EOF
+			return model.RecordBatch{}, io.EOF
 		}
 		// FIX: Save the offset from the batch we just read
 		r.lastOffset = batch.StreamOffset
 		return batch, nil
 	case <-ctx.Done():
-		return pipeline.RecordBatch{}, ctx.Err()
+		return model.RecordBatch{}, ctx.Err()
 	}
 }
 
-func (r *inProcReader) Commit(ctx context.Context, token pipeline.CheckpointToken) error {
+func (r *inProcReader) Commit(ctx context.Context, token model.CheckpointToken) error {
 	r.stream.mu.Lock()
 	defer r.stream.mu.Unlock()
 
@@ -245,7 +245,7 @@ func (s *InProcStream) replayUncommitted() error {
 		// FIX: Update offset (4 bytes for length prefix + length of data)
 		currentOffset += int64(4) + int64(length)
 
-		var batch pipeline.RecordBatch
+		var batch model.RecordBatch
 		if err := json.Unmarshal(data, &batch); err != nil {
 			return err
 		}

@@ -4,19 +4,21 @@ import (
 	"context"
 
 	"github.com/aula-id/etl-pipeline-go/pkg/lifecycle"
-	"github.com/aula-id/etl-pipeline-go/pkg/pipeline"
+	"github.com/aula-id/etl-pipeline-go/pkg/model"
 )
 
 type Stream interface {
 	lifecycle.Lifecycle
+	Writer() StreamWriter
+	Reader() StreamReader
 }
 
 type StreamWriter interface {
-	Publish(context.Context, pipeline.RecordBatch) error
+	Publish(context.Context, model.RecordBatch) error
 	Flush(context.Context) error
 }
 
 type StreamReader interface {
-	Read(context.Context) (pipeline.RecordBatch, error)
-	Commit(context.Context, pipeline.CheckpointToken) error
+	Read(context.Context) (model.RecordBatch, error)
+	Commit(context.Context, model.CheckpointToken) error
 }
