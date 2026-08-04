@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aula-id/etl-pipeline-go/pkg/pipeline"
+	"github.com/aula-id/etl-pipeline-go/pkg/model"
 )
 
 func TestInProcStream_CrashRecovery(t *testing.T) {
@@ -30,8 +30,8 @@ func TestInProcStream_CrashRecovery(t *testing.T) {
 	writer := s1.Writer()
 	reader := s1.Reader() // Attach reader to receive data
 
-	batch1 := pipeline.RecordBatch{ID: "batch-1", Records: []pipeline.Record{{Key: []byte("key1")}}}
-	batch2 := pipeline.RecordBatch{ID: "batch-2", Records: []pipeline.Record{{Key: []byte("key2")}}}
+	batch1 := model.RecordBatch{ID: "batch-1", Records: []model.Record{{Key: []byte("key1")}}}
+	batch2 := model.RecordBatch{ID: "batch-2", Records: []model.Record{{Key: []byte("key2")}}}
 
 	// Publish writes to file (fsync) and channel
 	if err := writer.Publish(ctx, batch1); err != nil {
