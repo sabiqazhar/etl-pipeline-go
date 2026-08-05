@@ -1,0 +1,17 @@
+worker:
+  drain_timeout: 10s
+
+pipelines:
+  - id: demo-pipeline
+    source:
+      type: memory
+      config:
+        records:
+          - { key: "user-1", val: "Alice" }
+          - { key: "user-2", val: "Bob" }
+          - { key: "user-3", val: "Charlie" }
+          - { key: "user-4", val: "David" }
+    sinks:
+      - id: console-logger
+        type: stdout
+        config: {}
