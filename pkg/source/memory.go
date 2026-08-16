@@ -2,6 +2,7 @@ package source
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/aula-id/etl-pipeline-go/pkg/lifecycle"
@@ -49,6 +50,7 @@ func (s *MemorySource) Run(ctx context.Context) error {
 
 	// Emit batches
 	batchSize := 2
+	batchSeq := 0
 	for i := 0; i < len(s.records); i += batchSize {
 		end := i + batchSize
 		if end > len(s.records) {
@@ -65,9 +67,13 @@ func (s *MemorySource) Run(ctx context.Context) error {
 			})
 		}
 
+		batchSeq++
 		batch := model.RecordBatch{
-			ID:      "mem-batch",
+			ID:      fmt.Sprintf("mem-batch-%d", batchSeq),
 			Records: recs,
+			// Sequence number as checkpoint token. Real sources use their own
+			// position marker (Postgres CDC: LSN; Kafka: topic-partition-offset).
+			Checkpoint: model.CheckpointToken(fmt.Sprintf("seq:%d", batchSeq)),
 		}
 
 		select {

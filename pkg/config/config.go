@@ -17,6 +17,7 @@ type Config struct {
 type WorkerConfig struct {
 	DrainTimeout      time.Duration `yaml:"drain_timeout"`
 	MaxRestartBackoff time.Duration `yaml:"max_restart_backoff"`
+	CheckpointPath    string        `yaml:"checkpoint_path"`
 }
 
 type PipelineConfig struct {
@@ -46,6 +47,9 @@ func Load(path string) (*Config, error) {
 	// Set defaults
 	if cfg.Worker.DrainTimeout == 0 {
 		cfg.Worker.DrainTimeout = 30 * time.Second
+	}
+	if cfg.Worker.CheckpointPath == "" {
+		cfg.Worker.CheckpointPath = "/tmp/etl-checkpoints.db" // Default for dev
 	}
 
 	return &cfg, nil
