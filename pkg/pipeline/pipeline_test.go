@@ -37,7 +37,7 @@ func TestPipeline_HappyPath(t *testing.T) {
 
 	pipe := New("test-pipeline", src, str, []SinkConfig{
 		{ID: "sink-1", Sink: sink},
-	}, testLogger())
+	}, nil, testLogger())
 
 	ctx := context.Background()
 
@@ -89,7 +89,7 @@ func TestPipeline_MultiSinkFanOut(t *testing.T) {
 	pipe := New("fanout-pipeline", src, str, []SinkConfig{
 		{ID: "sink-A", Sink: sinkA},
 		{ID: "sink-B", Sink: sinkB},
-	}, testLogger())
+	}, nil, testLogger())
 
 	ctx := context.Background()
 	if err := pipe.Init(ctx); err != nil {
@@ -139,7 +139,7 @@ func TestPipeline_SinkIsolation(t *testing.T) {
 	pipe := New("isolation-pipeline", src, str, []SinkConfig{
 		{ID: "fast-sink", Sink: fastSink},
 		{ID: "slow-sink", Sink: slowSink},
-	}, testLogger())
+	}, nil, testLogger())
 
 	ctx := context.Background()
 	if err := pipe.Init(ctx); err != nil {
@@ -187,7 +187,7 @@ func TestPipeline_GracefulShutdown(t *testing.T) {
 
 	pipe := New("shutdown-pipeline", src, str, []SinkConfig{
 		{ID: "sink-1", Sink: sink},
-	}, testLogger())
+	}, nil, testLogger())
 
 	ctx, cancel := context.WithCancel(context.Background())
 

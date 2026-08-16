@@ -1,5 +1,6 @@
 worker:
   drain_timeout: 10s
+  checkpoint_path: /tmp/etl-checkpoints.db
 
 pipelines:
   - id: demo-pipeline

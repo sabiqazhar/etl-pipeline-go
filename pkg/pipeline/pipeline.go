@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"sync"
 
+	"github.com/aula-id/etl-pipeline-go/pkg/checkpoint"
 	"github.com/aula-id/etl-pipeline-go/pkg/lifecycle"
 	"github.com/aula-id/etl-pipeline-go/pkg/stream"
 )
@@ -19,28 +20,31 @@ type SinkConfig struct {
 // Pipeline composes Source → Stream → N Consumers (one per Sink).
 // It implements lifecycle.Lifecycle and is managed by a Supervisor.
 type Pipeline struct {
-	sm        *lifecycle.StateManager
-	id        string
-	source    Source
-	stream    stream.Stream
-	sinks     []SinkConfig
-	producer  *Producer
-	consumers []*Consumer
-	logger    *slog.Logger
+	sm              *lifecycle.StateManager
+	id              string
+	source          Source
+	stream          stream.Stream
+	sinks           []SinkConfig
+	producer        *Producer
+	consumers       []*Consumer
+	checkpointStore checkpoint.Store
+	logger          *slog.Logger
 }
 
 // New creates a Pipeline.
-func New(id string, source Source, str stream.Stream, sinks []SinkConfig, logger *slog.Logger) *Pipeline {
+// checkpointStore can be nil (checkpointing disabled — backward compatible with Phase 1).
+func New(id string, source Source, str stream.Stream, sinks []SinkConfig, ckptStore checkpoint.Store, logger *slog.Logger) *Pipeline {
 	if logger == nil {
 		logger = slog.Default()
 	}
 	return &Pipeline{
-		sm:     lifecycle.NewStateManager(),
-		id:     id,
-		source: source,
-		stream: str,
-		sinks:  sinks,
-		logger: logger,
+		sm:              lifecycle.NewStateManager(),
+		id:              id,
+		source:          source,
+		stream:          str,
+		sinks:           sinks,
+		checkpointStore: ckptStore,
+		logger:          logger,
 	}
 }
 
@@ -58,7 +62,7 @@ func (p *Pipeline) Init(ctx context.Context) error {
 	}
 
 	// 2. Init Producer (wraps Source, writes to Stream)
-	p.producer = NewProducer(p.source, p.stream, p.logger)
+	p.producer = NewProducer(p.source, p.stream, p.checkpointStore, p.id, p.logger)
 	if err := p.producer.Init(ctx); err != nil {
 		return fmt.Errorf("producer init failed: %w", err)
 	}
@@ -77,6 +81,7 @@ func (p *Pipeline) Init(ctx context.Context) error {
 	p.logger.Info("pipeline initialized",
 		"pipeline", p.id,
 		"consumers", len(p.consumers),
+		"checkpointing", p.checkpointStore != nil,
 	)
 	return nil
 }
