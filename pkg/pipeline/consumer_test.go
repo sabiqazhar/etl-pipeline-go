@@ -110,7 +110,7 @@ func TestConsumer_NoCommitOnLoadFailure(t *testing.T) {
 	sink := newMockSink()
 	ckptStore := newMockCheckpointStore()
 
-	// ← FIX: Track loaded batches manually via external variable
+	// Track loaded batches manually via external variable
 	var loadedBatches []model.RecordBatch
 	callCount := 0
 	sink.loadFunc = func(ctx context.Context, batch RecordBatch) error {
