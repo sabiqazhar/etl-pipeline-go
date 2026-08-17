@@ -1,0 +1,92 @@
+{
+  "go.mod": {
+    "mtime": 1782323097.8290076,
+    "ast_hash": "074ad1e2fe790cb61ace8cdc41c6f36f",
+    "semantic_hash": "074ad1e2fe790cb61ace8cdc41c6f36f"
+  },
+  "pkg/lifecycle/errors.go": {
+    "mtime": 1782323097.8307116,
+    "ast_hash": "8c9306aa77fc7a87d9e981f449b24021",
+    "semantic_hash": "8c9306aa77fc7a87d9e981f449b24021"
+  },
+  "pkg/lifecycle/lifecycle.go": {
+    "mtime": 1782323097.8310168,
+    "ast_hash": "c06fb01943c7e8b243d882f51861e5cf",
+    "semantic_hash": "c06fb01943c7e8b243d882f51861e5cf"
+  },
+  "pkg/lifecycle/lifecycle_test.go": {
+    "mtime": 1782323097.831333,
+    "ast_hash": "7d480311228afa29d5a8d28f677293e0",
+    "semantic_hash": "7d480311228afa29d5a8d28f677293e0"
+  },
+  "pkg/lifecycle/state.go": {
+    "mtime": 1782323097.8315043,
+    "ast_hash": "adb3d38c32715b0ba37a4960c4adbac3",
+    "semantic_hash": "adb3d38c32715b0ba37a4960c4adbac3"
+  },
+  "pkg/pipeline/types.go": {
+    "mtime": 1785743082.455201,
+    "ast_hash": "49944d3c73d08ff0edc123d6b81f09a5",
+    "semantic_hash": "49944d3c73d08ff0edc123d6b81f09a5"
+  },
+  "pkg/stream/inproc.go": {
+    "mtime": 1783876772.677554,
+    "ast_hash": "7927b2ec1c437d0b7f2cbb640cc54024",
+    "semantic_hash": "7927b2ec1c437d0b7f2cbb640cc54024"
+  },
+  "pkg/stream/inproc_test.go": {
+    "mtime": 1783876772.6776645,
+    "ast_hash": "f6f0dd83ffb33f871ab6d87d79f04c74",
+    "semantic_hash": "f6f0dd83ffb33f871ab6d87d79f04c74"
+  },
+  "pkg/stream/stream.go": {
+    "mtime": 1783876772.6777365,
+    "ast_hash": "31cad568e667ed8fd46c1749d6abd397",
+    "semantic_hash": "31cad568e667ed8fd46c1749d6abd397"
+  },
+  "pkg/supervisor/backoff.go": {
+    "mtime": 1785742224.3801715,
+    "ast_hash": "2baa2ff297b83656a5bb46be1eb4b085",
+    "semantic_hash": "2baa2ff297b83656a5bb46be1eb4b085"
+  },
+  "pkg/supervisor/options.go": {
+    "mtime": 1785742224.380873,
+    "ast_hash": "cb22e5996aa2b2eef426052a35399bd0",
+    "semantic_hash": "cb22e5996aa2b2eef426052a35399bd0"
+  },
+  "pkg/supervisor/supervisor.go": {
+    "mtime": 1785742224.380873,
+    "ast_hash": "1ca1fb5f51450a8048013f6a7d3726ce",
+    "semantic_hash": "1ca1fb5f51450a8048013f6a7d3726ce"
+  },
+  "pkg/supervisor/supervisor_test.go": {
+    "mtime": 1785742224.380873,
+    "ast_hash": "b2f736781de6af6bd782b5df1b1058f8",
+    "semantic_hash": "b2f736781de6af6bd782b5df1b1058f8"
+  },
+  "README.md": {
+    "mtime": 1780655823.3748875,
+    "ast_hash": "289764be6952d06f3af9f983c6729d53",
+    "semantic_hash": "289764be6952d06f3af9f983c6729d53"
+  },
+  "docs/rfcs/0000-template.md": {
+    "mtime": 1780655823.3755312,
+    "ast_hash": "47a356d0ea46c4ef5b2756907a987b42",
+    "semantic_hash": "47a356d0ea46c4ef5b2756907a987b42"
+  },
+  "docs/rfcs/0001-pipeline-core-architecture.md": {
+    "mtime": 1780993655.9935427,
+    "ast_hash": "2c7c276b0ff1abd43990960927325dff",
+    "semantic_hash": "2c7c276b0ff1abd43990960927325dff"
+  },
+  "docs/rfcs/0002-phase1-core-implementation.md": {
+    "mtime": 1781024977.3172379,
+    "ast_hash": "ea69b52089649dd9b3c2d7d56ed40b7f",
+    "semantic_hash": "ea69b52089649dd9b3c2d7d56ed40b7f"
+  },
+  "docs/rfcs/README.md": {
+    "mtime": 1780993491.953017,
+    "ast_hash": "62c46133c22c6704beb5fbbf37965dda",
+    "semantic_hash": "62c46133c22c6704beb5fbbf37965dda"
+  }
+}

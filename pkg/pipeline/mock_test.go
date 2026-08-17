@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	"github.com/aula-id/etl-pipeline-go/pkg/lifecycle"
+	"github.com/aula-id/etl-pipeline-go/pkg/model"
 )
 
 // --- Mock Source ---
@@ -61,7 +62,7 @@ type mockSink struct {
 	sm       *lifecycle.StateManager
 	mu       sync.Mutex
 	received []RecordBatch
-	loadFunc func(ctx context.Context, batch RecordBatch) error
+	loadFunc func(ctx context.Context, batch model.RecordBatch) error
 }
 
 func newMockSink() *mockSink {
@@ -95,6 +96,14 @@ func (m *mockSink) Drain(ctx context.Context) error {
 
 func (m *mockSink) Close() error {
 	return m.sm.Transition(lifecycle.StateClosed)
+}
+
+func (m *mockSink) LoadCalls() []RecordBatch {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	result := make([]RecordBatch, len(m.received))
+	copy(result, m.received)
+	return result
 }
 
 func (m *mockSink) Received() []RecordBatch {
