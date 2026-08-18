@@ -20,10 +20,9 @@ type CheckpointToken []byte
 
 // RecordBatch is a group of records processed together.
 type RecordBatch struct {
-	ID           string          `json:"id"`
-	Records      []Record        `json:"records"`
-	Checkpoint   CheckpointToken `json:"checkpoint"`
-	StreamOffset int64           `json:"-"`
+	ID         string          `json:"id"`
+	Records    []Record        `json:"records"`
+	Checkpoint CheckpointToken `json:"checkpoint"`
 }
 
 // Source extracts records from an external system.

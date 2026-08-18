@@ -63,10 +63,9 @@ func buildPipeline(cfg config.PipelineConfig, ckptStore checkpoint.Store, logger
 		return nil, err
 	}
 
-	// Create Stream (InProcStream for Phase 1)
-	// Use temp dir for spillover to avoid cluttering project root
+	// Create Stream (pass checkpoint store + pipeline ID)
 	spillDir := fmt.Sprintf("/tmp/etl-spill-%s", cfg.ID)
-	str, err := stream.NewInProcStream(spillDir, 100)
+	str, err := stream.NewInProcStream(spillDir, 100, ckptStore, cfg.ID, logger)
 	if err != nil {
 		return nil, err
 	}

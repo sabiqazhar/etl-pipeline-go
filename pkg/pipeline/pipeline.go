@@ -56,7 +56,7 @@ func (p *Pipeline) Init(ctx context.Context) error {
 
 	p.logger.Info("initializing pipeline", "pipeline", p.id)
 
-	// 1. Init Stream
+	// 1. Init Stream (pass checkpoint store + pipeline ID)
 	if err := p.stream.Init(ctx); err != nil {
 		return fmt.Errorf("stream init failed: %w", err)
 	}
