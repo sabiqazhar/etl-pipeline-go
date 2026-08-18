@@ -31,3 +31,6 @@ mise.toml
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# AI Workflow
+graphify-out/

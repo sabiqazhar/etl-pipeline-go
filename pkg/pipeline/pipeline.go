@@ -56,22 +56,23 @@ func (p *Pipeline) Init(ctx context.Context) error {
 
 	p.logger.Info("initializing pipeline", "pipeline", p.id)
 
-	// 1. Init Stream first (it's the transport layer)
+	// 1. Init Stream
 	if err := p.stream.Init(ctx); err != nil {
 		return fmt.Errorf("stream init failed: %w", err)
 	}
 
-	// 2. Init Producer (wraps Source, writes to Stream)
+	// 2. Init Producer (pass checkpoint store)
 	p.producer = NewProducer(p.source, p.stream, p.checkpointStore, p.id, p.logger)
 	if err := p.producer.Init(ctx); err != nil {
 		return fmt.Errorf("producer init failed: %w", err)
 	}
 
-	// 3. Init Consumers (one per Sink, each gets its own Reader)
+	// 3. Init Consumers (pass checkpoint store + pipeline ID)
 	p.consumers = make([]*Consumer, 0, len(p.sinks))
 	for _, sc := range p.sinks {
-		reader := p.stream.Reader() // Each consumer gets an independent reader (fan-out)
-		consumer := NewConsumer(sc.ID, reader, sc.Sink, p.logger)
+		reader := p.stream.Reader()
+		// ← UPDATED: pass pipeline ID and checkpoint store
+		consumer := NewConsumer(sc.ID, p.id, reader, sc.Sink, p.checkpointStore, p.logger)
 		if err := consumer.Init(ctx); err != nil {
 			return fmt.Errorf("consumer %q init failed: %w", sc.ID, err)
 		}
